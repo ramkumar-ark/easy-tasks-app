@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 import { DUMMY_USERS } from '../../dummy-users';
 
@@ -6,7 +6,8 @@ import { DUMMY_USERS } from '../../dummy-users';
   providedIn: 'root',
 })
 export class UsersService {
-  get users() {
-    return DUMMY_USERS;
+  users = signal<typeof DUMMY_USERS>(DUMMY_USERS);
+  getUserById(id: string) {
+    return this.users().find((user) => user.id === id);
   }
 }
