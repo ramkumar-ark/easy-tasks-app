@@ -1,6 +1,11 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { UsersService } from '../users.service';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 
 @Component({
   selector: 'app-user-tasks',
@@ -10,7 +15,14 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   imports: [RouterOutlet, RouterLink],
 })
 export class UserTasksComponent {
-  userId = input.required<string>();
-  private userService = inject(UsersService);
-  user = computed(() => this.userService.getUserById(this.userId()));
+  userName = input.required<string>();
 }
+
+export const userNameResolver: ResolveFn<string> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const userId = route.paramMap.get('userId');
+  const userService = inject(UsersService);
+  const user = userService.getUserById(userId!);
+  return user ? user.name : '';
+};
