@@ -14,8 +14,15 @@ import { RouterLink } from '@angular/router';
 })
 export class TasksComponent {
   userId = input.required<string>();
+  order = input<'asc' | 'desc'>();
   private readonly tasksService = inject(TasksService);
   userTasks: Signal<Task[]> = computed(() =>
-    this.tasksService.getTasksByUserId(this.userId())
+    this.tasksService.getTasksByUserId(this.userId()).sort((a, b) => {
+      if (this.order() === 'asc') {
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+      } else {
+        return new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime();
+      }
+    })
   );
 }

@@ -8,3 +8,8 @@ ul {
   max-height: 50vh;
   overflow: auto;
 }
+
+a {
+  text-decoration: none;
+  color: #6ea2f5;
+}
